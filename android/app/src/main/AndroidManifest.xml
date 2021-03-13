@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.csgo_tracker">
+    package="com.italix.csgo_tracker">
    <application
         android:label="csgo_tracker"
         android:icon="@mipmap/ic_launcher">
