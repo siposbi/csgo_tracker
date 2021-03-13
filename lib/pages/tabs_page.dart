@@ -15,7 +15,8 @@ class _TabsPageState extends State<TabsPage> {
       body: IndexedStack(
         index: _currentIndex,
         children: <Widget>[
-          for (final tabItem in TabNavigationItem.items) tabItem.page,
+          for (final tabItem in TabNavigationItem.items)
+            tabItem.page,
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
