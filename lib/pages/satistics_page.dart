@@ -19,7 +19,23 @@ class StatisticsPage extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: [Expanded(child: buildStatisticsCard(context, 0))],
+            children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Text("test"),
+                    ],
+                  ),
+                ),
+                margin: EdgeInsets.all(10.0),
+                color: Colors.lightBlue,
+              ),
+            ],
           ),
           Expanded(
             child: GridView.count(
