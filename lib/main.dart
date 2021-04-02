@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csgo_tracker/pages/sign_in_page.dart';
 import 'package:csgo_tracker/pages/tabs_page.dart';
 import 'package:csgo_tracker/services/authentication_service.dart';
+import 'package:csgo_tracker/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +26,13 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               context.read<AuthenticationService>().authStateChanges,
           initialData: null,
-        )
+        ),
+        Provider<DatabaseService>(
+            create: (context) => DatabaseService(FirebaseFirestore.instance, context),
+        ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Mm Tracker',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -47,27 +52,5 @@ class AuthenticationWrapper extends StatelessWidget {
       return TabsPage();
     }
     return SignInPage();
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("HOME"),
-            ElevatedButton(
-              onPressed: () {
-                context.read<AuthenticationService>().signOut();
-              },
-              child: Text("Sign out"),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

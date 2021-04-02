@@ -12,6 +12,9 @@ class _TabsPageState extends State<TabsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(TabNavigationItem.items[_currentIndex].label),
+      ),
       body: IndexedStack(
         index: _currentIndex,
         children: <Widget>[

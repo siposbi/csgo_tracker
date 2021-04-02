@@ -1,6 +1,6 @@
 import 'package:csgo_tracker/pages/matches_page.dart';
 import 'package:csgo_tracker/pages/satistics_page.dart';
-import 'package:csgo_tracker/pages/search_page.dart';
+import 'package:csgo_tracker/pages/about_page.dart';
 import 'package:flutter/material.dart';
 
 class TabNavigationItem {
@@ -24,8 +24,8 @@ class TabNavigationItem {
             label: 'Matches',
             icon: Icon(Icons.list)),
         TabNavigationItem(
-            page: SearchPage(),
-            label: 'Search',
-            icon: Icon(Icons.search)),
+            page: AboutPage(),
+            label: 'About',
+            icon: Icon(Icons.info_outline)),
       ];
 }
