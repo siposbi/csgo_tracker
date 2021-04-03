@@ -1,43 +1,52 @@
+import 'package:csgo_tracker/materials/custom_card.dart';
+import 'package:csgo_tracker/models/match_model.dart';
+import 'package:csgo_tracker/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StatisticsPage extends StatelessWidget {
-  final List<String> statList = [
-    "Kills: 4215",
-    "Deaths: 2860",
-    "Assists: 667",
-    "K/D: 1.1474",
-    "Matches: 180",
-    "Won: 90",
-    "Lost: 90",
-    "Win %: 50%",
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(statList.length,
-            (index) => buildStatisticsCard(context, index)),
-      ),
-    );
-  }
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: FutureBuilder<List<MatchModel>>(
+          future: context.read<DatabaseService>().getMatchesForStats(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<MatchModel>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-  Widget buildStatisticsCard(BuildContext context, int index) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Text(statList[index]),
-          ],
-        ),
-      ),
-      margin: EdgeInsets.all(10.0),
-      color: Colors.lightBlue,
+            var kills = snapshot.data!.fold(
+                0, (int sum, MatchModel item) => sum + item.numberOfKills);
+            var deaths = snapshot.data!.fold(
+                0, (int sum, MatchModel item) => sum + item.numberOfDeaths);
+            var assists = snapshot.data!.fold(
+                0, (int sum, MatchModel item) => sum + item.numberOfAssists);
+            var kpd = kills / deaths;
+            var matches = snapshot.data!.length;
+            var won = snapshot.data!
+                .where((element) => element.roundsWon > element.roundsLost)
+                .length;
+            var lost = snapshot.data!
+                .where((element) => element.roundsWon < element.roundsLost)
+                .length;
+            var wlp = won / matches;
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomCard(title: 'Kills', text: kills.toString()),
+                  CustomCard(title: 'Deaths', text: deaths.toString()),
+                  CustomCard(title: 'Assists', text: assists.toString()),
+                  CustomCard(title: 'K/D', text: kpd.toStringAsFixed(2)),
+                  CustomCard(title: 'Matches', text: matches.toString()),
+                  CustomCard(title: 'Won', text: won.toString()),
+                  CustomCard(title: 'Lost', text: lost.toString()),
+                  CustomCard(title: 'Win %', text: wlp.toStringAsFixed(2)),
+                ],
+            );
+          }),
     );
   }
 }

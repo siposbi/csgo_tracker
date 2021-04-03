@@ -11,8 +11,17 @@ class DatabaseService {
 
   DatabaseService(this._db, this._context);
 
-  Stream<QuerySnapshot> getMatches() {
-    return _db.collection('test').snapshots();
+  Stream<List<MatchModel>> getMatches() {
+    return _db.collection('test').snapshots().map((snapshot) =>
+        snapshot.docs.map((e) => MatchModel.fromJson(e.data()!)).toList());
+  }
+
+  Future<List<MatchModel>> getMatchesForStats() async {
+    CollectionReference _collectionRef = _db.collection('test');
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+    return querySnapshot.docs
+        .map((e) => MatchModel.fromJson(e.data()!))
+        .toList();
   }
 
   Future<void> addMatch(MatchModel match) {
