@@ -27,6 +27,7 @@ class _TabsPageState extends State<TabsPage> {
         data: Theme.of(context).copyWith(
           canvasColor: CustomColors.PRIMARY_COLOR,
           primaryColor: Colors.white,
+          unselectedWidgetColor: Colors.black,
         ), //
         child: BottomNavigationBar(
           currentIndex: _currentIndex,

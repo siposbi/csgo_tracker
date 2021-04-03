@@ -52,7 +52,7 @@ class MatchesPage extends StatelessWidget {
         ],
       );
 
-  Widget expansionBody(match, context) =>
+  Widget expansionBody(match, BuildContext context) =>
       Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
@@ -61,20 +61,26 @@ class MatchesPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 myColumn('Kills', match.numberOfKills.toString()),
-                VerticalDivider(color: CustomColors.PRIMARY_COLOR,
+                VerticalDivider(
+                  color: CustomColors.PRIMARY_COLOR,
                   thickness: 2,
-                  width: 3,),
+                  width: 3,
+                ),
                 myColumn('Assists', match.numberOfAssists.toString()),
-                VerticalDivider(color: CustomColors.PRIMARY_COLOR,
+                VerticalDivider(
+                  color: CustomColors.PRIMARY_COLOR,
                   thickness: 2,
-                  width: 3,),
+                  width: 3,
+                ),
                 myColumn(
                   'Deaths',
                   match.numberOfDeaths.toString(),
                 ),
-                VerticalDivider(color: CustomColors.PRIMARY_COLOR,
+                VerticalDivider(
+                  color: CustomColors.PRIMARY_COLOR,
                   thickness: 2,
-                  width: 3,),
+                  width: 3,
+                ),
                 myColumn(
                   'K/D',
                   match.killsPerDeathsRatio.toStringAsFixed(2),
