@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csgo_tracker/materials/custom_colors.dart';
 import 'package:csgo_tracker/pages/sign_in_page.dart';
 import 'package:csgo_tracker/pages/tabs_page.dart';
 import 'package:csgo_tracker/services/authentication_service.dart';
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
+        Provider<CustomColors>(
+          create: (_) => CustomColors(),
+        ),
         StreamProvider(
           create: (context) =>
               context.read<AuthenticationService>().authStateChanges,
@@ -34,7 +38,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Mm Tracker',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: CustomColors.PRIMARY_SWATCH,
+          scaffoldBackgroundColor: CustomColors.BACKGROUND_COLOR,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: AuthenticationWrapper(),

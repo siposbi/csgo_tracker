@@ -17,7 +17,8 @@ class MatchesPage extends StatelessWidget {
             }
             final matches = snapshot.data!.docs
                 .map((e) => MatchModel.fromMap(e.data()!))
-                .toList();
+                .toList()
+                  ..sort((d1, d2) => d2.createdAt.compareTo(d1.createdAt));
             return ListView.separated(
               itemBuilder: (_, index) =>
                   buildMatchCard(context, matches[index]),

@@ -26,7 +26,6 @@ class AuthenticationService {
     UserCredential result =
         await _firebaseAuth.signInWithCredential(credential);
 
-
     if (result.additionalUserInfo!.isNewUser){
       User? user = result.user;
       await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({

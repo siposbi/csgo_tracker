@@ -1,12 +1,13 @@
 class MatchModel {
-  DateTime dateTime;
+  DateTime gameDate, createdAt;
   String map;
   int roundsWon, roundsLost, numberOfKills, numberOfAssists, numberOfDeaths;
 
   double get killsPerDeathsRatio => numberOfKills / numberOfDeaths;
 
   MatchModel(
-      {required this.dateTime,
+      {required this.createdAt,
+      required this.gameDate,
       required this.map,
       required this.roundsWon,
       required this.roundsLost,
@@ -16,17 +17,13 @@ class MatchModel {
 
   factory MatchModel.fromMap(Map<String, dynamic> data) {
     return MatchModel(
+        createdAt: data['createdAt'].toDate(),
+        gameDate: data['gameDate'].toDate(),
         map: data['map'],
-        dateTime: data['dateTime'].toDate(),
         roundsWon: data['roundsWon'],
         roundsLost: data['roundsLost'],
         numberOfKills: data['numberOfKills'],
         numberOfAssists: data['numberOfAssists'],
         numberOfDeaths: data['numberOfDeaths']);
-  }
-
-  @override
-  String toString() {
-    return 'MatchModel{dateTime: $dateTime, map: $map, roundsWon: $roundsWon, roundsLost: $roundsLost, numberOfKills: $numberOfKills, numberOfAssists: $numberOfAssists, numberOfDeaths: $numberOfDeaths}';
   }
 }

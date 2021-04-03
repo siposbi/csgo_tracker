@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csgo_tracker/models/match_model.dart';
+import 'package:csgo_tracker/materials/custom_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,25 +33,33 @@ class _AddMatchState extends State<AddMatch> {
   DateTime? selectedDate;
   TextEditingController dateController = TextEditingController();
 
+  InputDecoration _inputDecoration(text) => InputDecoration(
+        filled: true,
+        fillColor: CustomColors.CARD_COLOR,
+        labelText: text,
+        labelStyle: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        border: const OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.PRIMARY_COLOR)),
+        enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.PRIMARY_COLOR)),
+      );
+
   Widget buildDropDown() => DropdownButtonFormField(
-        decoration: InputDecoration(
-          labelText: 'Choose a map',
-          border: OutlineInputBorder(),
-        ),
+        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        decoration: _inputDecoration('Choose a map'),
+        dropdownColor: CustomColors.CARD_COLOR,
         onChanged: (value) => setState(() => dropDownValue = value.toString()),
         items: mapList
-            .map((cityTitle) =>
-                DropdownMenuItem(value: cityTitle, child: Text("$cityTitle")))
+            .map((mapName) =>
+                DropdownMenuItem(value: mapName, child: Text("$mapName")))
             .toList(),
         validator: (value) => value == null ? 'Map required' : null,
       );
 
   Widget customFormInput(String labelText, PrimitiveWrapper variable) =>
       TextFormField(
-        decoration: InputDecoration(
-          labelText: labelText,
-          border: OutlineInputBorder(),
-        ),
+        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        decoration: _inputDecoration(labelText),
         keyboardType: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -75,6 +83,7 @@ class _AddMatchState extends State<AddMatch> {
   }
 
   Widget buildDatePicker() => TextFormField(
+        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
         controller: dateController,
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -85,14 +94,11 @@ class _AddMatchState extends State<AddMatch> {
             return 'Date required';
           }
         },
-        decoration: InputDecoration(
-          labelText: 'Date',
-          border: OutlineInputBorder(),
-        ),
+        decoration: _inputDecoration('Date'),
       );
 
   Widget submitButton() => ElevatedButton(
-      child: Text("Submit"),
+      child: Text("Add match"),
       onPressed: () {
         final isValid = _formKey.currentState!.validate();
         if (isValid) {
@@ -102,7 +108,8 @@ class _AddMatchState extends State<AddMatch> {
               FirebaseFirestore.instance.collection('test');
 
           users.add({
-            'dateTime': selectedDate!,
+            'createdAt': DateTime.now(),
+            'gameDate': selectedDate!,
             'map': dropDownValue!,
             'numberOfKills': kills.value,
             'numberOfDeaths': deaths.value,
@@ -132,6 +139,7 @@ class _AddMatchState extends State<AddMatch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Adding a new match'),
       ),
       body: Form(
