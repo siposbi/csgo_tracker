@@ -1,14 +1,97 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csgo_tracker/materials/custom_colors.dart';
 import 'package:csgo_tracker/models/match_model.dart';
 import 'package:csgo_tracker/pages/add_new_match_page.dart';
 import 'package:csgo_tracker/services/database_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MatchesPage extends StatelessWidget {
+  Widget myColumn(title, text) => Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: CustomColors.PRIMARY_COLOR,
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      );
+
+  Widget expansionTitle(match) => Row(
+        children: [
+          Image.asset(
+            'images/${match.map}.png',
+            width: 64,
+            height: 64,
+          ),
+          Spacer(),
+          Text(
+            '${match.roundsWon.toString()} - ${match.roundsLost.toString()}',
+            style: TextStyle(
+              color: match.roundsWon >= match.roundsLost
+                  ? Colors.green
+                  : Colors.red,
+              fontSize: 36.0,
+            ),
+          ),
+          Spacer(),
+        ],
+      );
+
+  Widget expansionBody(match, context) =>
+      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                myColumn('Kills', match.numberOfKills.toString()),
+                myColumn('Assists', match.numberOfAssists.toString()),
+                myColumn(
+                  'Deaths',
+                  match.numberOfDeaths.toString(),
+                ),
+                myColumn(
+                  'K/D',
+                  match.killsPerDeathsRatio.toStringAsFixed(2),
+                ),
+              ],
+            ),
+          ),
+        ),
+        ElevatedButton(
+            child: Text(
+              'Delete',
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+                onPrimary: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ))),
+            onPressed: () =>
+                context.read<DatabaseService>().deleteMatch(match)),
+      ]);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,101 +128,15 @@ class MatchesPage extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16.0)),
-                            child: ExpansionTile(
-                              title: Row(
+                            child: Theme(
+                              data: ThemeData(dividerColor: Colors.transparent),
+                              child: ExpansionTile(
+                                title: expansionTitle(matches[index]),
+                                backgroundColor: CustomColors.CARD_COLOR,
                                 children: [
-                                  SizedBox(
-                                      height: 64,
-                                      width: 64,
-                                      child: Image.asset(
-                                          'images/${matches[index].map}.png')),
-                                  Spacer(),
-                                  Text(
-                                    '${matches[index].roundsWon.toString()} - ${matches[index].roundsLost.toString()}',
-                                    style: TextStyle(
-                                      color: matches[index].roundsWon >=
-                                              matches[index].roundsLost
-                                          ? Colors.green
-                                          : Colors.red,
-                                      fontSize: 36.0,
-                                    ),
-                                  ),
-                                  Spacer(),
+                                  expansionBody(matches[index], context)
                                 ],
                               ),
-                              backgroundColor: CustomColors.CARD_COLOR,
-                              children: [
-                                Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 16.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Text('Kills'),
-                                                Text(matches[index]
-                                                    .numberOfKills
-                                                    .toString()),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text('Assists'),
-                                                Text(matches[index]
-                                                    .numberOfAssists
-                                                    .toString()),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text('Deaths'),
-                                                Text(matches[index]
-                                                    .numberOfDeaths
-                                                    .toString()),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text('K/D'),
-                                                Text(matches[index]
-                                                    .killsPerDeathsRatio
-                                                    .toStringAsFixed(2)),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                          child: Text(
-                                            'Delete',
-                                            style: TextStyle(
-                                              fontSize: 24.0,
-                                            ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors.red,
-                                              onPrimary: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                Radius.circular(16.0),
-                                              ))),
-                                          onPressed: () {
-                                            CollectionReference users =
-                                                FirebaseFirestore.instance
-                                                    .collection(
-                                                        'users/${context.read<User?>()!.uid}/games');
-
-                                            users.doc(matches[index].documentUrl).delete();
-                                          }),
-                                    ])
-                              ],
                             ),
                           ),
                         ),

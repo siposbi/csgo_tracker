@@ -32,8 +32,8 @@ class _AddMatchState extends State<AddMatch> {
     'Vertigo',
   ];
 
-  DateTime? selectedDate;
-  TextEditingController dateController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  TextEditingController dateController = TextEditingController(text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
 
   InputDecoration _inputDecoration(text) => InputDecoration(
         filled: true,
@@ -134,7 +134,7 @@ class _AddMatchState extends State<AddMatch> {
                     numberOfKills: kills.value,
                     numberOfAssists: assists.value,
                     numberOfDeaths: deaths.value,
-                    gameDate: selectedDate!);
+                    gameDate: selectedDate);
 
                 try {
                   ScaffoldMessenger.of(context).showSnackBar(_snackBar(

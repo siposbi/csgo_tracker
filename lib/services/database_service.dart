@@ -13,7 +13,9 @@ class DatabaseService {
 
   Stream<List<MatchModel>> getMatches() {
     return _db.collection('users/$uid/games').snapshots().map((snapshot) =>
-        snapshot.docs.map((e) => MatchModel.fromJson(e.data()!, url: e.id)).toList());
+        snapshot.docs
+            .map((e) => MatchModel.fromJson(e.data()!, url: e.id))
+            .toList());
   }
 
   Future<List<MatchModel>> getMatchesForStats() async {
@@ -27,5 +29,10 @@ class DatabaseService {
   Future<void> addMatch(MatchModel match) {
     CollectionReference users = _db.collection('users/$uid/games');
     return users.add(match.toJson());
+  }
+
+  Future<void> deleteMatch(MatchModel match) {
+    CollectionReference users = _db.collection('users/$uid/games');
+    return users.doc(match.documentUrl).delete();
   }
 }
