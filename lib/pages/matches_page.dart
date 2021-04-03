@@ -15,6 +15,9 @@ class MatchesPage extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
+            if (snapshot.data == null) {
+              return Text(snapshot.error.toString());
+            }
             final matches = snapshot.data!.docs
                 .map((e) => MatchModel.fromMap(e.data()!))
                 .toList()
