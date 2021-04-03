@@ -19,7 +19,7 @@ class MatchesPage extends StatelessWidget {
               return Text(snapshot.error.toString());
             }
             final matches = snapshot.data!.docs
-                .map((e) => MatchModel.fromMap(e.data()!))
+                .map((e) => MatchModel.fromJson(e.data()!))
                 .toList()
                   ..sort((d1, d2) => d2.createdAt.compareTo(d1.createdAt));
             return ListView.separated(

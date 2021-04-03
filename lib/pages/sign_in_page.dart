@@ -17,7 +17,7 @@ class SignInPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Sign in',
+              'Sign in to use this app',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 32.0,
@@ -43,8 +43,31 @@ class SignInPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(
                       Radius.circular(16.0),
                     ))),
-                onPressed: () {
-                  context.read<AuthenticationService>().signInWithGoogle();
+                onPressed: () async {
+                  try {
+                    await context
+                        .read<AuthenticationService>()
+                        .signInWithGoogle();
+                    var username = context
+                        .read<AuthenticationService>()
+                        .currentUser!
+                        .displayName;
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        'Signed in as $username',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.green,
+                    ));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        'Error while signing in $e',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.green,
+                    ));
+                  }
                 },
               ),
             ),

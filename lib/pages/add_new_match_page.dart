@@ -1,9 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csgo_tracker/materials/custom_colors.dart';
+import 'package:csgo_tracker/models/match_model.dart';
+import 'package:csgo_tracker/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AddMatch extends StatefulWidget {
   @override
@@ -97,35 +99,58 @@ class _AddMatchState extends State<AddMatch> {
         decoration: _inputDecoration('Date'),
       );
 
-  Widget submitButton() => ElevatedButton(
-      child: Text("Add match"),
-      onPressed: () {
-        final isValid = _formKey.currentState!.validate();
-        if (isValid) {
-          _formKey.currentState!.save();
+  SnackBar _snackBar(text, color) => SnackBar(
+        content: Text(
+          text,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: color,
+      );
 
-          CollectionReference users =
-              FirebaseFirestore.instance.collection('test');
+  Widget submitButton() => SizedBox(
+        height: 48.0,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+              Radius.circular(16.0),
+            ))),
+            child: Text(
+              "Add match",
+              style: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            onPressed: () async {
+              final isValid = _formKey.currentState!.validate();
+              if (isValid) {
+                _formKey.currentState!.save();
 
-          users.add({
-            'createdAt': DateTime.now(),
-            'gameDate': selectedDate!,
-            'map': dropDownValue!,
-            'numberOfKills': kills.value,
-            'numberOfDeaths': deaths.value,
-            'numberOfAssists': assists.value,
-            'roundsLost': roundsLost.value,
-            'roundsWon': roundsWon.value,
-          }).then((value) => Navigator.pop(context));
+                var match = MatchModel(
+                    createdAt: DateTime.now(),
+                    map: dropDownValue!,
+                    roundsWon: roundsWon.value,
+                    roundsLost: roundsLost.value,
+                    numberOfKills: kills.value,
+                    numberOfAssists: assists.value,
+                    numberOfDeaths: deaths.value,
+                    gameDate: selectedDate!);
 
-          // final snackbar = SnackBar(
-          //   content: Text(assists.value.toString()),
-          //   backgroundColor: Colors.red,
-          // );
-          // ScaffoldMessenger.of(context).showSnackBar(snackbar);
-          // Navigator.pop(context);
-        }
-      });
+                try {
+                  ScaffoldMessenger.of(context).showSnackBar(_snackBar(
+                      'Adding match to database', Colors.deepOrangeAccent));
+                  await context.read<DatabaseService>().addMatch(match);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      _snackBar('Successfully added', Colors.green));
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      _snackBar('An error occurred $e', Colors.red));
+                }
+              }
+            }),
+      );
 
   Widget inputRow(w1, w2, padding) => Row(
         children: [
@@ -144,30 +169,33 @@ class _AddMatchState extends State<AddMatch> {
       ),
       body: Form(
         key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.all(16),
-          children: [
-            buildDropDown(),
-            const SizedBox(
-              height: 20,
-            ),
-            inputRow(customFormInput('Rounds won', roundsWon),
-                customFormInput('Rounds lost', roundsLost), 10.0),
-            const SizedBox(
-              height: 20,
-            ),
-            inputRow(customFormInput('Kills', kills),
-                customFormInput('Deaths', deaths), 10.0),
-            const SizedBox(
-              height: 20,
-            ),
-            inputRow(
-                customFormInput('Assists', assists), buildDatePicker(), 10.0),
-            const SizedBox(
-              height: 20,
-            ),
-            submitButton()
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              buildDropDown(),
+              const SizedBox(
+                height: 20,
+              ),
+              inputRow(customFormInput('Rounds won', roundsWon),
+                  customFormInput('Rounds lost', roundsLost), 10.0),
+              const SizedBox(
+                height: 20,
+              ),
+              inputRow(customFormInput('Kills', kills),
+                  customFormInput('Deaths', deaths), 10.0),
+              const SizedBox(
+                height: 20,
+              ),
+              inputRow(
+                  customFormInput('Assists', assists), buildDatePicker(), 10.0),
+              const SizedBox(
+                height: 20,
+              ),
+              submitButton()
+            ],
+          ),
         ),
       ),
     );

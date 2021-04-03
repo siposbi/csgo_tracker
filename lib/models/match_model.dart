@@ -15,15 +15,27 @@ class MatchModel {
       required this.numberOfAssists,
       required this.numberOfDeaths});
 
-  factory MatchModel.fromMap(Map<String, dynamic> data) {
-    return MatchModel(
-        createdAt: data['createdAt'].toDate(),
-        gameDate: data['gameDate'].toDate(),
-        map: data['map'],
-        roundsWon: data['roundsWon'],
-        roundsLost: data['roundsLost'],
-        numberOfKills: data['numberOfKills'],
-        numberOfAssists: data['numberOfAssists'],
-        numberOfDeaths: data['numberOfDeaths']);
+  MatchModel.fromJson(Map<String, dynamic> json)
+      : this(
+            createdAt: json['createdAt'].toDate(),
+            gameDate: json['gameDate'].toDate(),
+            map: json['map'],
+            roundsWon: json['roundsWon'],
+            roundsLost: json['roundsLost'],
+            numberOfKills: json['numberOfKills'],
+            numberOfAssists: json['numberOfAssists'],
+            numberOfDeaths: json['numberOfDeaths']);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'createdAt': createdAt,
+      'gameDate': gameDate,
+      'map': map,
+      'numberOfKills': numberOfKills,
+      'numberOfDeaths': numberOfDeaths,
+      'numberOfAssists': numberOfAssists,
+      'roundsLost': roundsLost,
+      'roundsWon': roundsWon,
+    };
   }
 }
