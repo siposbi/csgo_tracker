@@ -18,7 +18,7 @@ class MatchesPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
             child: Text(
               text,
               style: TextStyle(
@@ -61,11 +61,20 @@ class MatchesPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 myColumn('Kills', match.numberOfKills.toString()),
+                VerticalDivider(color: CustomColors.PRIMARY_COLOR,
+                  thickness: 2,
+                  width: 3,),
                 myColumn('Assists', match.numberOfAssists.toString()),
+                VerticalDivider(color: CustomColors.PRIMARY_COLOR,
+                  thickness: 2,
+                  width: 3,),
                 myColumn(
                   'Deaths',
                   match.numberOfDeaths.toString(),
                 ),
+                VerticalDivider(color: CustomColors.PRIMARY_COLOR,
+                  thickness: 2,
+                  width: 3,),
                 myColumn(
                   'K/D',
                   match.killsPerDeathsRatio.toStringAsFixed(2),
