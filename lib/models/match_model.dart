@@ -2,6 +2,7 @@ class MatchModel {
   DateTime gameDate, createdAt;
   String map;
   int roundsWon, roundsLost, numberOfKills, numberOfAssists, numberOfDeaths;
+  String? documentUrl;
 
   double get killsPerDeathsRatio => numberOfKills / numberOfDeaths;
 
@@ -13,9 +14,10 @@ class MatchModel {
       required this.roundsLost,
       required this.numberOfKills,
       required this.numberOfAssists,
-      required this.numberOfDeaths});
+      required this.numberOfDeaths,
+      this.documentUrl});
 
-  MatchModel.fromJson(Map<String, dynamic> json)
+  MatchModel.fromJson(Map<String, dynamic> json, {String? url})
       : this(
             createdAt: json['createdAt'].toDate(),
             gameDate: json['gameDate'].toDate(),
@@ -24,7 +26,8 @@ class MatchModel {
             roundsLost: json['roundsLost'],
             numberOfKills: json['numberOfKills'],
             numberOfAssists: json['numberOfAssists'],
-            numberOfDeaths: json['numberOfDeaths']);
+            numberOfDeaths: json['numberOfDeaths'],
+            documentUrl: url);
 
   Map<String, dynamic> toJson() {
     return {

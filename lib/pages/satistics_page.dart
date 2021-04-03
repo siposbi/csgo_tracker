@@ -23,7 +23,7 @@ class StatisticsPage extends StatelessWidget {
                 0, (int sum, MatchModel item) => sum + item.numberOfDeaths);
             var assists = snapshot.data!.fold(
                 0, (int sum, MatchModel item) => sum + item.numberOfAssists);
-            var kpd = kills / deaths;
+            var kpd = deaths == 0 ? 0 : kills / deaths;
             var matches = snapshot.data!.length;
             var won = snapshot.data!
                 .where((element) => element.roundsWon > element.roundsLost)
@@ -31,7 +31,7 @@ class StatisticsPage extends StatelessWidget {
             var lost = snapshot.data!
                 .where((element) => element.roundsWon < element.roundsLost)
                 .length;
-            var wlp = won / matches;
+            var wlp = matches == 0 ? 0 : won / matches;
 
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
