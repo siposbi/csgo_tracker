@@ -1,4 +1,4 @@
-package com.example.csgo_tracker;
+package com.italix.csgo_tracker;
 
 import io.flutter.embedding.android.FlutterActivity;
 
