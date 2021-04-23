@@ -1,16 +1,20 @@
-# csgo_tracker
+# CSGO: MM Tracker
 
-A CS:GO matchmaking statistics tracker app.
+A CS:GO matchmaking statistics tracker app.  
+In this app you can add your recent matches. After adding them, they are shown in a list, where you can delete them.  
+Firebase Firestore is used for storing your matches, so you can view them on multiple devices.
 
-## Getting Started
+This app is meant to be used just for fun and should not be taken seriously, because it might be shut down in any moment.  
 
-This project is a starting point for a Flutter application.
+# Demo
 
-A few resources to get you started if this is your first Flutter project:
+You can view the demo of this app after signing in with Google at [https://mm-tracker-a799e.web.app](https://mm-tracker-a799e.web.app).  
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Platforms
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This app was designed for Android and Web.
+
+## Known bugs
+
+Feel free to open issues, but I probably will not fix most of them.  
+1, Some element of the design falls apart when viewed on a phone, using the web build. 
