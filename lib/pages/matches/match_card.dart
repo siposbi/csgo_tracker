@@ -23,6 +23,7 @@ class MatchCard extends StatelessWidget {
           child: Theme(
             data: ThemeData(dividerColor: Colors.transparent),
             child: ExpansionTile(
+              key: PageStorageKey(matchModel.documentUrl),
               title: expansionTitle(matchModel),
               backgroundColor: CustomColors.CARD_COLOR,
               children: [expansionBody(matchModel, context)],
