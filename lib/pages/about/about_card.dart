@@ -1,12 +1,11 @@
+import 'package:csgo_tracker/materials/custom_colors.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_colors.dart';
-
-class CustomCard extends StatelessWidget {
+class AboutPageCard extends StatelessWidget {
   final String title;
   final String text;
 
-  CustomCard({required this.title, required this.text});
+  AboutPageCard({required this.title, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +13,13 @@ class CustomCard extends StatelessWidget {
       color: CustomColors.CARD_COLOR,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(16.0),
-          )),
+        Radius.circular(16.0),
+      )),
       child: SizedBox(
         width: double.infinity,
         height: 64.0,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -43,4 +42,5 @@ class CustomCard extends StatelessWidget {
         ),
       ),
     );
-  }}
+  }
+}

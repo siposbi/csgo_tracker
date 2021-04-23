@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csgo_tracker/materials/custom_colors.dart';
-import 'package:csgo_tracker/pages/sign_in_page.dart';
+import 'file:///C:/Users/thesi/Desktop/csgo_tracker/csgo_tracker/lib/pages/sign_in/sign_in_page.dart';
 import 'package:csgo_tracker/pages/tabs_page.dart';
 import 'package:csgo_tracker/services/authentication_service.dart';
 import 'package:csgo_tracker/services/database_service.dart';

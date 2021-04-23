@@ -1,3 +1,4 @@
+import 'package:csgo_tracker/materials/show_snackbar.dart';
 import 'package:csgo_tracker/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ class SignInPage extends StatelessWidget {
         title: Text('CS:GO Mm Tracker'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,21 +53,14 @@ class SignInPage extends StatelessWidget {
                         .read<AuthenticationService>()
                         .currentUser!
                         .displayName;
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        'Signed in as $username',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.green,
-                    ));
+                    ShowSnackBar.show(
+                        context: context,
+                        text: 'Signed in as $username');
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        'Error while signing in $e',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.green,
-                    ));
+                    ShowSnackBar.show(
+                        context: context,
+                        text: 'Error while signing in $e',
+                        backgroundColor: Colors.red);
                   }
                 },
               ),
