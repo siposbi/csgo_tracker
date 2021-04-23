@@ -14,7 +14,7 @@ class DatabaseService {
   Stream<List<MatchModel>> getMatches() {
     return _db.collection('users/$uid/games').snapshots().map((snapshot) =>
         snapshot.docs
-            .map((e) => MatchModel.fromJson(e.data()!, url: e.id))
+            .map((e) => MatchModel.fromJson(e.data(), url: e.id))
             .toList());
   }
 
@@ -22,7 +22,7 @@ class DatabaseService {
     CollectionReference _collectionRef = _db.collection('users/$uid/games');
     QuerySnapshot querySnapshot = await _collectionRef.get();
     return querySnapshot.docs
-        .map((e) => MatchModel.fromJson(e.data()!))
+        .map((e) => MatchModel.fromJson(e.data()))
         .toList();
   }
 

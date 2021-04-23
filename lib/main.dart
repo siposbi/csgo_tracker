@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csgo_tracker/materials/custom_colors.dart';
-import 'package:csgo_tracker/pages/sign_in_page.dart';
+import 'package:csgo_tracker/pages/sign_in/sign_in_page.dart';
 import 'package:csgo_tracker/pages/tabs_page.dart';
 import 'package:csgo_tracker/services/authentication_service.dart';
 import 'package:csgo_tracker/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
@@ -32,7 +35,8 @@ class MyApp extends StatelessWidget {
           initialData: null,
         ),
         Provider<DatabaseService>(
-            create: (context) => DatabaseService(FirebaseFirestore.instance, context),
+          create: (context) =>
+              DatabaseService(FirebaseFirestore.instance, context),
         ),
       ],
       child: MaterialApp(

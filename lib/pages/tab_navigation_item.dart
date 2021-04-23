@@ -1,6 +1,6 @@
-import 'package:csgo_tracker/pages/matches_page.dart';
-import 'package:csgo_tracker/pages/satistics_page.dart';
-import 'package:csgo_tracker/pages/about_page.dart';
+import 'package:csgo_tracker/pages/about/about_page.dart';
+import 'package:csgo_tracker/pages/matches/matches_page.dart';
+import 'package:csgo_tracker/pages/statistics/satistics_page.dart';
 import 'package:flutter/material.dart';
 
 class TabNavigationItem {
