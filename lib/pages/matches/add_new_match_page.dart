@@ -1,4 +1,6 @@
 import 'package:csgo_tracker/materials/custom_colors.dart';
+import 'package:csgo_tracker/materials/primitive_wrapper.dart';
+import 'package:csgo_tracker/materials/show_snackbar.dart';
 import 'package:csgo_tracker/models/match_model.dart';
 import 'package:csgo_tracker/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,132 +35,8 @@ class _AddMatchState extends State<AddMatch> {
   ];
 
   DateTime selectedDate = DateTime.now();
-  TextEditingController dateController = TextEditingController(text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
-
-  InputDecoration _inputDecoration(text) => InputDecoration(
-        filled: true,
-        fillColor: CustomColors.CARD_COLOR,
-        labelText: text,
-        labelStyle: TextStyle(color: CustomColors.PRIMARY_COLOR),
-        border: const OutlineInputBorder(
-            borderSide: BorderSide(color: CustomColors.PRIMARY_COLOR)),
-        enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: CustomColors.PRIMARY_COLOR)),
-      );
-
-  Widget buildDropDown() => DropdownButtonFormField(
-        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
-        decoration: _inputDecoration('Choose a map'),
-        dropdownColor: CustomColors.CARD_COLOR,
-        onChanged: (value) => setState(() => dropDownValue = value.toString()),
-        items: mapList
-            .map((mapName) =>
-                DropdownMenuItem(value: mapName, child: Text("$mapName")))
-            .toList(),
-        validator: (value) => value == null ? 'Map required' : null,
-      );
-
-  Widget customFormInput(String labelText, PrimitiveWrapper variable) =>
-      TextFormField(
-        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
-        decoration: _inputDecoration(labelText),
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        ],
-        validator: (value) => value!.isEmpty ? 'Number required' : null,
-        onSaved: (value) => setState(() => variable.value = int.parse(value!)),
-      );
-
-  Future _selectDate() async {
-    DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2012),
-        lastDate: DateTime.now().add(Duration(days: 1)));
-    if (picked != null) {
-      setState(() => {
-            selectedDate = picked,
-            dateController.text = DateFormat('yyyy-MM-dd').format(picked)
-          });
-    }
-  }
-
-  Widget buildDatePicker() => TextFormField(
-        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
-        controller: dateController,
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _selectDate();
-        },
-        validator: (value) {
-          if (value!.isEmpty || value.length < 1) {
-            return 'Date required';
-          }
-        },
-        decoration: _inputDecoration('Date'),
-      );
-
-  SnackBar _snackBar(text, color) => SnackBar(
-        content: Text(
-          text,
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: color,
-      );
-
-  Widget submitButton() => SizedBox(
-        height: 48.0,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ))),
-            child: Text(
-              "Add match",
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
-            onPressed: () async {
-              final isValid = _formKey.currentState!.validate();
-              if (isValid) {
-                _formKey.currentState!.save();
-
-                var match = MatchModel(
-                    createdAt: DateTime.now(),
-                    map: dropDownValue!,
-                    roundsWon: roundsWon.value,
-                    roundsLost: roundsLost.value,
-                    numberOfKills: kills.value,
-                    numberOfAssists: assists.value,
-                    numberOfDeaths: deaths.value,
-                    gameDate: selectedDate);
-
-                try {
-                  ScaffoldMessenger.of(context).showSnackBar(_snackBar(
-                      'Adding match to database', Colors.deepOrangeAccent));
-                  await context.read<DatabaseService>().addMatch(match);
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      _snackBar('Successfully added', Colors.green));
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      _snackBar('An error occurred $e', Colors.red));
-                }
-              }
-            }),
-      );
-
-  Widget inputRow(w1, w2, padding) => Row(
-        children: [
-          Expanded(child: w1),
-          Padding(padding: EdgeInsets.all(padding)),
-          Expanded(child: w2),
-        ],
-      );
+  TextEditingController dateController = TextEditingController(
+      text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
 
   @override
   Widget build(BuildContext context) {
@@ -200,10 +78,125 @@ class _AddMatchState extends State<AddMatch> {
       ),
     );
   }
-}
 
-class PrimitiveWrapper {
-  var value;
+  Widget inputRow(w1, w2, padding) => Row(
+        children: [
+          Expanded(child: w1),
+          Padding(padding: EdgeInsets.all(padding)),
+          Expanded(child: w2),
+        ],
+      );
 
-  PrimitiveWrapper(this.value);
+  Widget customFormInput(String labelText, PrimitiveWrapper variable) =>
+      TextFormField(
+        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        decoration: _inputDecoration(labelText),
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        ],
+        validator: (value) => value!.isEmpty ? 'Number required' : null,
+        onSaved: (value) => setState(() => variable.value = int.parse(value!)),
+      );
+
+  InputDecoration _inputDecoration(text) => InputDecoration(
+        filled: true,
+        fillColor: CustomColors.CARD_COLOR,
+        labelText: text,
+        labelStyle: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        border: const OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.PRIMARY_COLOR)),
+        enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.PRIMARY_COLOR)),
+      );
+
+  Widget buildDropDown() => DropdownButtonFormField(
+        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        decoration: _inputDecoration('Choose a map'),
+        dropdownColor: CustomColors.CARD_COLOR,
+        onChanged: (value) => setState(() => dropDownValue = value.toString()),
+        items: mapList
+            .map((mapName) =>
+                DropdownMenuItem(value: mapName, child: Text("$mapName")))
+            .toList(),
+        validator: (value) => value == null ? 'Map required' : null,
+      );
+
+  Future _selectDate() async {
+    DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2012),
+        lastDate: DateTime.now().add(Duration(days: 1)));
+    if (picked != null) {
+      setState(() => {
+            selectedDate = picked,
+            dateController.text = DateFormat('yyyy-MM-dd').format(picked)
+          });
+    }
+  }
+
+  Widget buildDatePicker() => TextFormField(
+        style: TextStyle(color: CustomColors.PRIMARY_COLOR),
+        controller: dateController,
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          _selectDate();
+        },
+        validator: (value) {
+          if (value!.isEmpty || value.length < 1) {
+            return 'Date required';
+          }
+        },
+        decoration: _inputDecoration('Date'),
+      );
+
+  Widget submitButton() => SizedBox(
+        height: 48.0,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+              Radius.circular(16.0),
+            ))),
+            child: Text(
+              "Add match",
+              style: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            onPressed: () async {
+              final isValid = _formKey.currentState!.validate();
+              if (isValid) {
+                _formKey.currentState!.save();
+
+                var match = MatchModel(
+                    createdAt: DateTime.now(),
+                    map: dropDownValue!,
+                    roundsWon: roundsWon.value,
+                    roundsLost: roundsLost.value,
+                    numberOfKills: kills.value,
+                    numberOfAssists: assists.value,
+                    numberOfDeaths: deaths.value,
+                    gameDate: selectedDate);
+
+                try {
+                  ShowSnackBar.show(
+                      context: context,
+                      text: 'Adding match to database',
+                      backgroundColor: Colors.blueAccent);
+                  await context.read<DatabaseService>().addMatch(match);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  Navigator.pop(context);
+                  ShowSnackBar.show(
+                      context: context, text: 'Successfully added');
+                } catch (e) {
+                  ShowSnackBar.show(
+                      context: context,
+                      text: 'An error occurred $e',
+                      backgroundColor: Colors.red);
+                }
+              }
+            }),
+      );
 }
