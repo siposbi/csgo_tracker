@@ -17,7 +17,6 @@ class MatchesPage extends StatelessWidget {
               stream: context.read<DatabaseService>().getMatches(),
               builder: (context, snapshot) {
                 if (snapshot.hasError || !snapshot.hasData) {
-                  print("snapshot error: ${snapshot.error}");
                   return Center(child: Text("Something went wrong"));
                 }
 

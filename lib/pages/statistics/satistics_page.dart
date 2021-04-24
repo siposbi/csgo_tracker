@@ -13,6 +13,10 @@ class StatisticsPage extends StatelessWidget {
           future: context.read<DatabaseService>().getMatchesForStats(),
           builder:
               (BuildContext context, AsyncSnapshot<List<MatchModel>> snapshot) {
+            if (snapshot.hasError || !snapshot.hasData) {
+              return Center(child: Text("Something went wrong"));
+            }
+
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }

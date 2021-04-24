@@ -12,8 +12,11 @@ class DatabaseService {
   DatabaseService(this._db, this._context);
 
   Stream<List<MatchModel>> getMatches() {
-    return _db.collection('users/$uid/games').snapshots().map((snapshot) =>
-        snapshot.docs
+    return _db
+        .collection('users/$uid/games')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
             .map((e) => MatchModel.fromJson(e.data(), url: e.id))
             .toList());
   }
