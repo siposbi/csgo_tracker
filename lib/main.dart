@@ -26,9 +26,6 @@ class MyApp extends StatelessWidget {
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
-        Provider<CustomColors>(
-          create: (_) => CustomColors(),
-        ),
         StreamProvider(
           create: (context) =>
               context.read<AuthenticationService>().authStateChanges,
