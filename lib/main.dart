@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Mm Tracker',
+        title: 'CS:GO MM Tracker',
         theme: ThemeData(
           primarySwatch: CustomColors.PRIMARY_SWATCH,
           scaffoldBackgroundColor: CustomColors.BACKGROUND_COLOR,

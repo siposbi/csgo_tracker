@@ -9,7 +9,7 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('CS:GO Mm Tracker'),
+        title: Text('CS:GO MM Tracker'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
