@@ -8,6 +8,7 @@ Since this app might be shut down in any moment, use it with caution.
 
 # Demo
 
+Demo has been shut down. I am sorry.  
 You can view the demo of this app after signing in with Google at [https://mm-tracker-a799e.web.app](https://mm-tracker-a799e.web.app).  
 
 ## Platforms
